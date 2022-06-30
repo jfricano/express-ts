@@ -6,7 +6,7 @@ interface UserCreds {
   password: string;
 }
 
-export const router = Router();
+const router = Router();
 
 router.get(
   '/login',
@@ -58,7 +58,11 @@ router.get('/logout', (req, res) => {
   res.redirect('/');
 });
 
-const requireAuth = (req: Request, res: Response, next: NextFunction): void => {
+const requireAuth = (
+  req: Request<{}, string, void>,
+  res: Response<string>,
+  next: NextFunction
+): void => {
   if (!req.session?.isLoggedIn) {
     res.status(403).send(`
       <div>not permitted</div>
@@ -66,9 +70,15 @@ const requireAuth = (req: Request, res: Response, next: NextFunction): void => {
     `);
   } else return void next();
 };
-router.get('/protected', requireAuth, (_req: Request, res: Response) => {
-  res.send(`
+router.get(
+  '/protected',
+  requireAuth,
+  (_req: Request, res: Response<string>) => {
+    res.send(`
     <div>welcome to protected route, logged-in user!</div>
     <a href="logout">logout</a>
   `);
-});
+  }
+);
+
+export default router;
