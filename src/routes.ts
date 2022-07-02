@@ -8,25 +8,6 @@ interface UserCreds {
 
 const router = Router();
 
-router.get(
-  '/login',
-  (req: Request<void, string, void>, res: Response<string>) => {
-    res.send(`
-    <form method="POST">
-      <div>
-        <label>Email</label>
-        <input name="email" />
-        </div>
-        <div>
-        <label>Password</label>
-        <input name="password" type="password" />
-      </div>
-      <button>Submit</button>
-    </form>
-  `);
-  }
-);
-
 router.post(
   '/login',
   (req: Request<{}, string, UserCreds>, res: Response<string>) => {
