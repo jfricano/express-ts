@@ -1,10 +1,16 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { controller, get } from './decorators';
+import { use } from './decorators';
 
-// asdf
+function logger(req: Request, res: Response, next: NextFunction) {
+  console.log('request made');
+  next();
+}
+
 @controller('/auth')
 class LoginController {
   @get('/login')
+  @use(logger)
   getLogin(
     _req: Request<undefined, string, undefined>,
     res: Response<string>

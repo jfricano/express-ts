@@ -2,11 +2,12 @@ export enum HttpMethod {
   Get = 'get',
   Post = 'post',
   Put = 'put',
-  Del = 'delete',
+  Delete = 'delete',
   Patch = 'patch',
 }
 
 export enum MetadataKey {
   Method = 'method',
   Path = 'path',
+  Middleware = 'middleware',
 }
