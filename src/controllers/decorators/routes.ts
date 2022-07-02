@@ -5,7 +5,7 @@ function routeBinder(method: HttpMethod) {
   return function (path: string) {
     return function (target: any, key: string) {
       Reflect.defineMetadata(MetadataKey.Path, path, target, key);
-      Reflect.defineMetadata(MetadataKey.Path, method, target, key);
+      Reflect.defineMetadata(MetadataKey.Method, method, target, key);
     };
   };
 }
