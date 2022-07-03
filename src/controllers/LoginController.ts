@@ -1,11 +1,6 @@
-import { Request, Response, NextFunction } from 'express';
-import { controller, bodyValidator, get, use, post } from './decorators';
-
-type TBody<K extends string | number | symbol, V> = {
-  [key in K]: V;
-};
-interface IRequestWithBody<K extends string | number | symbol, V, T>
-  extends Request<{}, T, TBody<K, V>> {}
+import { Response } from 'express';
+import { controller, bodyValidator, get, post } from './decorators';
+import { IRequestWithBody } from './types';
 
 enum KLoginBodyReq {
   Email = 'email',
