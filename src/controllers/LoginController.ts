@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { controller, get } from './decorators';
-import { use } from './decorators';
+import { controller, bodyValidator, get, use, post } from './decorators';
 
 function logger(req: Request, res: Response, next: NextFunction) {
   console.log('request made');
@@ -28,5 +27,16 @@ class LoginController {
         <button>Submit</button>
       </form>
     `);
+  }
+
+  @post('/login')
+  @bodyValidator('email', 'password')
+  postLogin(req: Request, res: Response) {
+    const { email, password } = req.body;
+    if (email === 'EHNUN' && password === 'Blueberry2022#') {
+      req.session = { isLoggedIn: true };
+      // res.redirect('/');
+      res.status(302).send('you logged in!');
+    } else res.redirect('/logout');
   }
 }

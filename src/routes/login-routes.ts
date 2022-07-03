@@ -8,17 +8,6 @@ interface UserCreds {
 
 const router = Router();
 
-router.post(
-  '/login',
-  (req: Request<{}, string, UserCreds>, res: Response<string>) => {
-    const { email, password } = req.body;
-    if (email === 'EHNUN' && password === 'Blueberry2022#') {
-      req.session = { isLoggedIn: true };
-      res.redirect('/');
-    } else res.redirect('/logout');
-  }
-);
-
 router.get('/logout', (req, res) => {
   req.session = undefined;
   res.redirect('/');
