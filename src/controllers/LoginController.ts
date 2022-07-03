@@ -1,19 +1,24 @@
 import { Request, Response, NextFunction } from 'express';
 import { controller, bodyValidator, get, use, post } from './decorators';
 
-function logger(req: Request, res: Response, next: NextFunction) {
-  console.log('request made');
-  next();
+type TBody<K extends string | number | symbol, V> = {
+  [key in K]: V;
+};
+interface IRequestWithBody<K extends string | number | symbol, V, T>
+  extends Request<{}, T, TBody<K, V>> {}
+
+enum KLoginBodyReq {
+  Email = 'email',
+  Password = 'password',
 }
+type LoginRequest = IRequestWithBody<KLoginBodyReq, string, string | undefined>;
+type LoginResponse = Response<string | undefined>;
 
 @controller('/auth')
 class LoginController {
   @get('/login')
-  @use(logger)
-  getLogin(
-    _req: Request<undefined, string, undefined>,
-    res: Response<string>
-  ): void {
+  // @use(logger)
+  getLogin(_req: never, res: LoginResponse): void {
     res.send(`
       <form method="POST">
         <div>
@@ -30,8 +35,8 @@ class LoginController {
   }
 
   @post('/login')
-  @bodyValidator('email', 'password')
-  postLogin(req: Request, res: Response) {
+  @bodyValidator(KLoginBodyReq.Email, KLoginBodyReq.Password)
+  postLogin(req: LoginRequest, res: LoginResponse) {
     const { email, password } = req.body;
     if (email === 'EHNUN' && password === 'Blueberry2022#') {
       req.session = { isLoggedIn: true };
