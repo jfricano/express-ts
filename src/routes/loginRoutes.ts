@@ -1,23 +1,6 @@
 import { NextFunction, Request, Response, Router } from 'express';
 
-// interface RequestWithBody<T> extends Request<{}, void, T> {}
-interface UserCreds {
-  email: string;
-  password: string;
-}
-
 const router = Router();
-
-router.post(
-  '/login',
-  (req: Request<{}, string, UserCreds>, res: Response<string>) => {
-    const { email, password } = req.body;
-    if (email === 'EHNUN' && password === 'Blueberry2022#') {
-      req.session = { isLoggedIn: true };
-      res.redirect('/');
-    } else res.redirect('/logout');
-  }
-);
 
 router.get('/logout', (req, res) => {
   req.session = undefined;
