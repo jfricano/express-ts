@@ -1,4 +1,4 @@
-import { Response } from 'express';
+import { Response, Request } from 'express';
 import { controller, bodyValidator, get, post } from './decorators';
 import { IRequestWithBody } from './types';
 
@@ -12,7 +12,6 @@ type LoginResponse = Response<string | undefined>;
 @controller('/auth')
 class LoginController {
   @get('/login')
-  // @use(logger)
   getLogin(_req: never, res: LoginResponse): void {
     const { Email: email, Password: password } = KLoginBodyReq;
 
@@ -41,8 +40,14 @@ class LoginController {
       password === 'Blueberry2022#'
     ) {
       req.session = { isLoggedIn: true };
-      // res.redirect('/');
-      res.status(302).send('you logged in!');
+      res.redirect('/');
     } else res.redirect('/logout');
+  }
+
+  @get('/logout')
+  getLogout(req: Request, res: Response) {
+    console.log('hihi');
+    req.session = undefined;
+    res.redirect('/');
   }
 }
