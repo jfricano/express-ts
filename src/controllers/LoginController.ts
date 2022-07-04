@@ -1,6 +1,6 @@
-import { Response, Request } from 'express';
+import { Response, Request, NextFunction } from 'express';
 import { controller, bodyValidator, get, post } from './decorators';
-import { IRequestWithBody } from './types';
+import { IRequestWithBody, RouterMiddlewareFunction } from './types';
 
 enum KLoginBodyReq {
   Email = 'email',
@@ -8,11 +8,12 @@ enum KLoginBodyReq {
 }
 type LoginRequest = IRequestWithBody<KLoginBodyReq, string, string | undefined>;
 type LoginResponse = Response<string | undefined>;
+type LogoutRequest = IRequestWithBody<'session', string, void>;
 
 @controller('/auth')
 class LoginController {
   @get('/login')
-  getLogin(_req: never, res: LoginResponse): void {
+  getLogin(_req: Request, res: LoginResponse): void {
     const { Email: email, Password: password } = KLoginBodyReq;
 
     res.send(`
@@ -32,7 +33,7 @@ class LoginController {
 
   @post('/login')
   @bodyValidator(KLoginBodyReq.Email, KLoginBodyReq.Password)
-  postLogin(req: LoginRequest, res: LoginResponse) {
+  postLogin(req: LoginRequest, res: Response) {
     const { email, password } = req.body;
 
     if (
@@ -45,8 +46,7 @@ class LoginController {
   }
 
   @get('/logout')
-  getLogout(req: Request, res: Response) {
-    console.log('hihi');
+  getLogout(req: LogoutRequest, res: Response) {
     req.session = undefined;
     res.redirect('/');
   }

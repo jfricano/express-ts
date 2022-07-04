@@ -14,20 +14,19 @@ const requireAuth = (
   } else return void next();
 };
 
-@controller('')
-class RootController {
-  private static template = (isLoggedIn: boolean) => `
+const template = (isLoggedIn: boolean) => `
     <div>
       <div>${isLoggedIn ? '' : 'NOT '}logged in</div>
-      <a href="auth/${isLoggedIn ? 'logout' : 'login'}">Log${
-    isLoggedIn ? 'out' : 'in'
-  }</a>
+      <a href="auth/${isLoggedIn ? 'logout' : 'login'}">
+        Log${isLoggedIn ? 'out' : 'in'}
+      </a>
     </div>
   `;
-
+@controller('')
+class RootController {
   @get('/')
-  getRoot(req: Request<{}, string, void>, res: Response<string>) {
-    res.send(RootController.template(req.session?.isLoggedIn));
+  getRoot(req: Request, res: Response<string>) {
+    res.send(template(req.session?.isLoggedIn));
   }
 
   @get('/protected')

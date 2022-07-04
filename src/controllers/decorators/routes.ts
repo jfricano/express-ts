@@ -1,9 +1,15 @@
+import { NextFunction, Request, RequestHandler, Response } from 'express';
 import 'reflect-metadata';
 import { HttpMethod, MetadataKey } from './enums';
 
+interface RouteHandlerDescriptor extends PropertyDescriptor {
+  value?: RequestHandler;
+}
+
 function routeBinder(method: HttpMethod) {
   return function (path: string) {
-    return function (target: any, key: string, desc: PropertyDescriptor) {
+    //  desc type means that this is the only type of function that can be assigned to a routehandler
+    return function (target: any, key: string, desc: RouteHandlerDescriptor) {
       Reflect.defineMetadata(MetadataKey.Path, path, target, key);
       Reflect.defineMetadata(MetadataKey.Method, method, target, key);
     };
